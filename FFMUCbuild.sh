@@ -9,6 +9,7 @@ GLUON_GIT=https://github.com/freifunk-gluon/gluon.git
 GLUON_RELEASE= # -r
 GLUON_TARGET= # -t
 GLUON_VERSION= # -v
+GLUON_BRANCH=experimental 
 OPENWRT_DIR=$(pwd)/openwrt # -l
 OUTPUT_DIR=$(pwd)/output # -o
 SITE_BRANCH=master # -z
@@ -63,5 +64,5 @@ while getopts ":bdg:j:l:o:r:s:t:v:z:" opt; do
   esac
 done
 
-docker run --rm -a STDOUT -a STDERR -v $OPENWRT_DIR:/gluon/openwrt -v $OUTPUT_DIR:/gluon/output -w /gluon handle/build-gluon /bin/bash -c "git checkout $GLUON_BRANCH; git pull; git clone $SITE_GIT -b $SITE_BRANCH /gluon/site; $([[ $DIRCLEAN = 1 ]] && echo "make -C openwrt dirclean;") make update GLUON_RELEASE=$GLUON_RELEASE; make -j $JOBS GLUON_TARGET=$GLUON_TARGET GLUON_RELEASE=$GLUON_RELEASE $([[ $GLUON_VERSION ]] && echo "GLUON_VERSION=$GLUON_VERSION") $([[ $BROKEN = 1 ]] && echo "BROKEN=1") 2>&1 \
-|| make -j 1 GLUON_TARGET=\"$GLUON_TARGET\" GLUON_RELEASE=$GLUON_RELEASE $([[ $GLUON_VERSION ]] && echo "GLUON_VERSION=$GLUON_VERSION") $([[ $BROKEN = 1 ]] && echo "BROKEN=1") V=s 2>&1"
+docker run --rm -a STDOUT -a STDERR -v $OPENWRT_DIR:/gluon/openwrt -v $OUTPUT_DIR:/gluon/output -w /gluon handle/build-gluon /bin/bash -c "git checkout $GLUON_BRANCH; git pull; git clone $SITE_GIT -b $SITE_BRANCH /gluon/site; $([[ $DIRCLEAN = 1 ]] && echo "make -C openwrt dirclean;") make update GLUON_RELEASE=$GLUON_RELEASE; make -j $JOBS GLUON_TARGET=$GLUON_TARGET GLUON_BRANCH=$GLUON_BRANCH GLUON_RELEASE=$GLUON_RELEASE $([[ $GLUON_VERSION ]] && echo "GLUON_VERSION=$GLUON_VERSION") $([[ $BROKEN = 1 ]] && echo "BROKEN=1") 2>&1 \
+|| make -j 1 GLUON_TARGET=\"$GLUON_TARGET\" GLUON_BRANCH=$GLUON_BRANCH GLUON_RELEASE=$GLUON_RELEASE $([[ $GLUON_VERSION ]] && echo "GLUON_VERSION=$GLUON_VERSION") $([[ $BROKEN = 1 ]] && echo "BROKEN=1") V=s 2>&1"
