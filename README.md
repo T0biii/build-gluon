@@ -19,5 +19,5 @@ Next steps for a successful build:
 Notes:  
 * When switching Gluon branches a `make -C openwrt dirclean` can be necessary in order to remove an old toolchain.
 * Make sure that you have enough free space, e. g. `ar71xx` needs around 11 GB. The other targets require similar amounts.
-
+* `make -j2 GLUON_BRANCH=experimental GLUON_TARGET=x86-64 DEFAULT_GLUON_RELEASE=t0biii.2019.0-exp~dock06`
 Fore more information visit https://gluon.readthedocs.io/.
