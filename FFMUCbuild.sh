@@ -2,9 +2,8 @@
 
 # Populate variables with default values
 
-BROKEN=0 # -b
-DIRCLEAN=1 # -d
-
+#BROKEN=0 # -b
+#DIRCLEAN=1 # -d
 #GLUON_TARGET= # -t
 #GLUON_VERSION= # -v
 #SITE_BRANCH=master # -z
