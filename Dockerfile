@@ -12,4 +12,4 @@ RUN apt-get update && apt-get install -y bzip2 gawk g++ gcc git libncurses5-dev 
 # Fetch files from gluon repository
 RUN git clone https://github.com/freifunkMUC/site-ffm.git gluon
 
-RUN git clone http://git.universe-factory.net/libuecc.git && cd libuecc && cmake ./ && make && make install && ldconfig && cd ../ && git clone https://github.com/freifunk-gluon/ecdsautils.git && cd ecdsautils && mkdir build && cd build/ && cmake ../ && make && make install && ldconfig
+RUN git clone http://git.universe-factory.net/libuecc && cd libuecc && cmake ./ && make && make install && ldconfig && cd ../ && git clone https://github.com/freifunk-gluon/ecdsautils.git && cd ecdsautils && mkdir build && cd build/ && cmake ../ && make && make install && ldconfig
