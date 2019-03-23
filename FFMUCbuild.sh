@@ -12,4 +12,4 @@ GLUON_BRANCH=experimental
 GLUON_TARGETS=x86-generic x86-geode x86-64
 
 
-docker run --rm -a STDOUT -a STDERR -v $OPENWRT_DIR:/gluon/openwrt -v $OUTPUT_DIR:/gluon/output -w /gluon build-gluon /bin/bash -c "make GLUON_RELEASE=$GLUON_RELEASE GLUON_BRANCH=$GLUON_BRANCH GLUON_GIT_URL=$GLUON_GIT GLUON_GIT_REF=$GLUON_GIT_REF GLUON_TARGETS=$GLUON_TARGETS"
+docker run --rm -a STDOUT -a STDERR -v $OPENWRT_DIR:/gluon/openwrt -v $OUTPUT_DIR:/gluon/output -w /gluon build-gluon /bin/bash -c "make sign GLUON_RELEASE=$GLUON_RELEASE GLUON_BRANCH=$GLUON_BRANCH GLUON_GIT_URL=$GLUON_GIT GLUON_GIT_REF=$GLUON_GIT_REF GLUON_TARGETS=$GLUON_TARGETS"
