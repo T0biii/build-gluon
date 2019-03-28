@@ -2,67 +2,15 @@
 
 # Populate variables with default values
 
-BROKEN=0 # -b
-DIRCLEAN=1 # -d
-GLUON_BRANCH=master # -g
+GLUON_GIT_REF=master
 GLUON_GIT=https://github.com/freifunk-gluon/gluon.git
-GLUON_RELEASE= # -r
-GLUON_TARGET= # -t
-GLUON_VERSION= # -v
-GLUON_BRANCH=experimental 
-OPENWRT_DIR=$(pwd)/openwrt # -l
-OUTPUT_DIR=$(pwd)/output # -o
-SITE_BRANCH=master # -z
-SITE_GIT= # -s
-JOBS=$(grep -c processor /proc/cpuinfo) # -j
+GLUON_BUILD_DIR=gluon-build
+GLUON_RELEASE=t0biii.2019.0-exp~dock08
+OPENWRT_DIR=$(pwd)/openwrt
+OUTPUT_DIR=$(pwd)/output
+SECRET_KEY_FILE=$(pwd)/key/secret
+GLUON_BRANCH=experimental
+GLUON_TARGETS=x86-generic x86-geode x86-64
 
-# Process flags
 
-while getopts ":bdg:j:l:o:r:s:t:v:z:" opt; do
-  case $opt in
-    b)
-      BROKEN=1
-      ;;
-    d)
-      DIRCLEAN=1
-      ;;
-    g)
-      GLUON_BRANCH="$OPTARG"
-      ;;
-    j)
-      JOBS="$OPTARG"
-      ;;
-    l)
-      LEDE_DIR="$OPTARG"
-      ;;
-    o)
-      OUTPUT_DIR="$OPTARG"
-      ;;
-    r)
-      GLUON_RELEASE="$OPTARG"
-      ;;
-    s)
-      SITE_GIT="$OPTARG"
-      ;;
-    t)
-      GLUON_TARGET="$OPTARG"
-      ;;
-    v)
-      GLUON_VERSION="$OPTARG"
-      ;;
-    z)
-      SITE_BRANCH="$OPTARG"
-      ;;
-   \?)
-      echo "Invalid option: -$OPTARG" >&2
-      exit 1
-      ;;
-    :)
-      echo "Option -$OPTARG requires an argument." >&2
-      exit 1
-      ;;
-  esac
-done
-
-docker run --rm -a STDOUT -a STDERR -v $OPENWRT_DIR:/gluon/openwrt -v $OUTPUT_DIR:/gluon/output -w /gluon handle/build-gluon /bin/bash -c "git checkout $GLUON_BRANCH; git pull; git clone $SITE_GIT -b $SITE_BRANCH /gluon/site; $([[ $DIRCLEAN = 1 ]] && echo "make -C openwrt dirclean;") make update GLUON_RELEASE=$GLUON_RELEASE; make -j $JOBS GLUON_TARGET=$GLUON_TARGET GLUON_BRANCH=$GLUON_BRANCH GLUON_RELEASE=$GLUON_RELEASE $([[ $GLUON_VERSION ]] && echo "GLUON_VERSION=$GLUON_VERSION") $([[ $BROKEN = 1 ]] && echo "BROKEN=1") 2>&1 \
-|| make -j 1 GLUON_TARGET=\"$GLUON_TARGET\" GLUON_BRANCH=$GLUON_BRANCH GLUON_RELEASE=$GLUON_RELEASE $([[ $GLUON_VERSION ]] && echo "GLUON_VERSION=$GLUON_VERSION") $([[ $BROKEN = 1 ]] && echo "BROKEN=1") V=s 2>&1"
+docker run --rm -a STDOUT -a STDERR -v $OPENWRT_DIR:/gluon/openwrt -v $OUTPUT_DIR:/gluon/output -v $KEY_DIR:/gluon/key  -w /gluon build-gluon /bin/bash -c "make sign GLUON_RELEASE=$GLUON_RELEASE GLUON_BRANCH=$GLUON_BRANCH GLUON_GIT_URL=$GLUON_GIT GLUON_GIT_REF=$GLUON_GIT_REF GLUON_TARGETS=$GLUON_TARGETS SECRET_KEY_FILE=$SECRET_KEY_FILE"
